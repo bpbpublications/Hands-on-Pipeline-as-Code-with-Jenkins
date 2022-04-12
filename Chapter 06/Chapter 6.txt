@@ -1,0 +1,101 @@
+** angular-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: myangularapp-deployment
+ labels:
+    app: myapp
+spec:
+ template:
+    metadata:
+     name: myapp-pod
+     labels:
+        app: myapp
+    spec:
+     containers:
+        - name: angular-app-container
+          image: sampleimages.azurecr.io/angular-sample:v1 
+ replicas: 1
+ 
+ selector: 
+    matchLabels:
+        app: myapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: myangularapp-service
+ labels:
+    app: myapp
+spec:
+ selector: 
+    app: myapp
+ ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+ type: LoadBalancer
+
+** Jenkinsfile
+
+pipeline {
+  agent {
+    node {
+      label 'master'
+    }
+
+  }
+  stages {
+    stage('Continuous Integration') {
+      steps {
+        bat 'npm install'
+        bat 'npm run lint > lint.txt'
+        bat 'npm install karma-junit-reporter --save-dev && npm run test'
+        junit 'TESTS-*.xml'
+        publishCoverage(adapters: [coberturaAdapter('coverage\\cobertura-coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE'))
+        bat 'npm run build:prod:en'
+        zip(dir: 'dist\\browser', zipFile: 'browser.zip')
+        stash(includes: 'browser.zip', name: 'dist')
+      }
+    }
+
+    stage('Deploy to Dev') {
+      agent {
+        node {
+          label 'centos'
+        }
+
+      }
+      steps {
+        sh 'docker version'
+        unstash 'dist'
+        sh 'chmod 755 browser.zip'
+        unzip(dir: 'dist/browser', zipFile: 'browser.zip')
+        sh 'docker build . -t test/angular-sample'
+        sh 'docker run -p 8080:80 --detach test/angular-sample'
+      }
+    }
+
+    stage('Deploy to AKS') {
+      steps {
+        echo 'AKS'
+        sh 'az acr login --name sampleImages && docker tag test/angular-sample sampleimages.azurecr.io/angular-sample:v1 && docker push sampleimages.azurecr.io/angular-sample'
+        sh 'az aks get-credentials --resource-group aks-jenkins --name AngularCluster && kubectl apply -f angular-deployment.yaml'
+      }
+    }
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+** Start Jenkins using the Generic Java package (.war):
+
+java -jar jenkins.war
+
+** Change the port to run Jenkins with the following command:
+
+java -jar jenkins.war --httpPort=9999
+
+** Scripted pipeline
+
+node {
+    /* Stages and Steps */
+}
+
+node {  
+    stage('SCA') { 
+        // steps
+    }
+    stage('CI') { 
+        // steps
+    }
+    stage('CD') { 
+        // steps
+    }
+}
+
+
+** Declarative pipeline 
+
+pipeline {
+    /* Stages and Steps */
+}
+pipeline {
+    agent any 
+    stages {
+        stage('SCA') { 
+            steps {
+                // 
+            }
+        }
+        stage('CI') { 
+            steps {
+                // 
+            }
+        }
+        stage('CD') { 
+            steps {
+                // 
+            }
+        }
+    }
+}
+

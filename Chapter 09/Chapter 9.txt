@@ -1,0 +1,15 @@
+** Jenkinsfile for Python App
+
+pipeline {
+  agent any
+  stages {
+stage('Continuous Integration') {
+      steps {
+        bat 'SONARSCANNER_PATH\\bin\\sonar-scanner.bat -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=<SONARQUBE_TOKEN> -Dsonar.projectVersion=1.0 -Dsonar.projectKey=python-sample -Dsonar.sources=example-py-pytest'
+        bat 'pip install pytest pytest-cov && python -m pytest example-py-pytest/tests/ --cov=com --cov-report=xml --cov-report=html'
+		junit 'test-output.xml'
+		cobertura(coberturaReportFile: 'coverage.xml', sourceEncoding: 'ASCII')
+      }
+    }
+  }
+}

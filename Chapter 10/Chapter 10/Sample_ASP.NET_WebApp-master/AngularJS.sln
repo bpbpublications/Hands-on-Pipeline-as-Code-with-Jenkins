@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularJSForm", "AngularJSForm\AngularJSForm.csproj", "{BD3CCE36-EDDF-4BD6-B58F-8E786059BCB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularJSFormTests", "AngularJSFormTests\AngularJSFormTests.csproj", "{B5CC497C-2805-4564-8D2F-2FA2CF20CE3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularJSFormTests1", "AngularJSFormTests1\AngularJSFormTests1.csproj", "{8FA4100F-6628-4FEA-8841-5CB76FDE6C85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD3CCE36-EDDF-4BD6-B58F-8E786059BCB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD3CCE36-EDDF-4BD6-B58F-8E786059BCB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD3CCE36-EDDF-4BD6-B58F-8E786059BCB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD3CCE36-EDDF-4BD6-B58F-8E786059BCB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5CC497C-2805-4564-8D2F-2FA2CF20CE3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5CC497C-2805-4564-8D2F-2FA2CF20CE3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5CC497C-2805-4564-8D2F-2FA2CF20CE3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5CC497C-2805-4564-8D2F-2FA2CF20CE3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA4100F-6628-4FEA-8841-5CB76FDE6C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA4100F-6628-4FEA-8841-5CB76FDE6C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA4100F-6628-4FEA-8841-5CB76FDE6C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA4100F-6628-4FEA-8841-5CB76FDE6C85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50798975-EAA1-4111-9A97-308C3CB76FB6}
+	EndGlobalSection
+EndGlobal

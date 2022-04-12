@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\euchaanu\Documents\AP\Sample_ASP.NET_WebApp_master\AngularJSForm\bin\Release\Publish</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="AngularJSForm.csproj">
+      <publishTime>08/21/2020 01:31:49</publishTime>
+    </File>
+    <File Include="AngularJSForm.csproj.user">
+      <publishTime>08/21/2020 01:22:55</publishTime>
+    </File>
+    <File Include="App_Start/RouteConfig.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="App_Start/WebApiConfig.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="bin/AngularJSForm.dll">
+      <publishTime>08/21/2020 01:32:08</publishTime>
+    </File>
+    <File Include="bin/AngularJSForm.dll.config">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="bin/AngularJSForm.dll.RoslynCA.json">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="bin/AngularJSForm.pdb">
+      <publishTime>08/21/2020 01:32:08</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>08/12/2020 20:30:16</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.xml">
+      <publishTime>08/12/2020 20:30:16</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.xml">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>08/12/2020 20:30:22</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml">
+      <publishTime>08/12/2020 20:30:22</publishTime>
+    </File>
+    <File Include="bin/Microsoft.VisualStudio.CodeCoverage.Shim.dll">
+      <publishTime>08/12/2020 20:30:22</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Administration.dll">
+      <publishTime>03/08/2016 11:28:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Delegation.dll">
+      <publishTime>07/03/2020 00:06:58</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Deployment.dll">
+      <publishTime>07/03/2020 00:09:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Deployment.Tracing.dll">
+      <publishTime>07/03/2020 00:05:26</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>08/12/2020 20:30:22</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>08/12/2020 20:30:23</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.xml">
+      <publishTime>08/12/2020 20:30:23</publishTime>
+    </File>
+    <File Include="bin/Release/Publish/app_offline.htm">
+      <publishTime>08/21/2020 01:35:58</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>08/12/2020 20:51:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>08/12/2020 20:51:19</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.xml">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.xml">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.xml">
+      <publishTime>08/12/2020 20:30:20</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.dll">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.xml">
+      <publishTime>08/12/2020 20:30:21</publishTime>
+    </File>
+    <File Include="Business/Evaluator.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Content/images/ng-loader.gif">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Content/Site.css">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Controllers/HomeController.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="ControllersNg/CalculatorController.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="ControllersNg/CustomerController.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>08/12/2020 20:30:13</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>08/12/2020 20:30:13</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>08/12/2020 20:30:13</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>08/12/2020 20:30:13</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Global.asax.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="libman.json">
+      <publishTime>08/12/2020 20:30:13</publishTime>
+    </File>
+    <File Include="Models/CalculatorModel.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/Customer.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.Context.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.Context.tt">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.Designer.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.edmx">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.edmx.diagram">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Models/myModel.tt">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>08/20/2020 23:18:12</publishTime>
+    </File>
+    <File Include="Properties/AssemblyInfo.cs">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Properties/PublishProfiles/FolderProfile.pubxml">
+      <publishTime>08/21/2020 01:35:50</publishTime>
+    </File>
+    <File Include="Properties/PublishProfiles/FolderProfile.pubxml.user">
+      <publishTime>08/21/2020 01:32:32</publishTime>
+    </File>
+    <File Include="Scripts/angular-mocks.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular-route.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular-route.min.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular-route.min.js.map">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular.min.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/angular.min.js.map">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.intellisense.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.map">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.intellisense.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.js">
+      <publishTime>08/12/2020 20:30:11</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.min.js">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.2.0.min.map">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.6.2.js">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Views/Home/About.cshtml">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Web.Debug.config">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+    <File Include="Web.Release.config">
+      <publishTime>08/12/2020 20:30:12</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

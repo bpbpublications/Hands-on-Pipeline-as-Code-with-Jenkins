@@ -1,0 +1,48 @@
+** Jenkinsfile - NodeJS Express App 
+
+pipeline {
+  agent any
+  stages {
+stage('Continuous Integration') {
+      steps {
+        bat 'SONARSCANNER_PATH\\bin\\sonar-scanner.bat -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=XXXXXXXXXXXXXXXXXXXXXXXXX -Dsonar.projectVersion=1.0 -Dsonar.projectKey=express-sample -Dsonar.sources=app'
+        bat 'npm -v'
+        bat 'npm install &&npm install jest-junit&&npm audit fix'
+        bat 'npm run lint > lint.txt &npm run jest'
+		cobertura(coberturaReportFile: 'coverage\\cobertura-coverage.xml', conditionalCoverageTargets: '70, 0, 0', lineCoverageTargets: '80, 0, 0', methodCoverageTargets: '80, 0, 0', sourceEncoding: 'ASCII')
+		junit '**/junit.xml'
+      }
+    }
+
+stage('Continuous Delivery') {
+      steps {
+        echo 'Configure Deployment step as an Exercise'
+      }
+    }
+
+  }
+}
+
+
+** Jenkinsfile NodeJS application 
+
+pipeline {
+  agent any
+  stages {
+	stage('Continuous Integration') {
+      steps {
+        bat 'SONARSCANNER_PATH\\bin\\sonar-scanner.bat -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=XXXXXXXXXXXXXXX -Dsonar.projectVersion=1.0 -Dsonar.projectKey=nodejs-sample -Dsonar.sources=app,models,test'
+        bat 'npm install &&npm install nyc --save-dev &&npm install mocha-junit-reporter --save-dev &&npm fund &&npm audit fix &&npm run coverage'
+		junit '**/TEST-*.xml'
+		cobertura(coberturaReportFile: '**\\coverage\\cobertura-coverage.xml', conditionalCoverageTargets: '70, 0, 0', lineCoverageTargets: '80, 0, 0', methodCoverageTargets: '80, 0, 0', sourceEncoding: 'ASCII')
+      }
+    }
+
+	stage('Continuous Delivery') {
+      steps {
+        echo 'Configure Deployment step as an Exercise'
+      }
+    }
+
+  }
+}

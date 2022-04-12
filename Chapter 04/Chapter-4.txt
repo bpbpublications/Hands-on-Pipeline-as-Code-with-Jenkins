@@ -1,0 +1,74 @@
+** Jenkinsfile for sample Android App
+
+pipeline {
+  agent any
+  stages {
+    stage('Lint Analysis') {
+      steps {
+        tool 'gradle-5.4.1-all'
+        tool 'JDK8'
+        bat 'gradlew.bat lint'
+        androidLint()
+      }
+    }
+
+    stage('UnitTests') {
+      steps {
+        tool 'gradle-5.4.1-all'
+        tool 'JDK8'
+        bat 'gradlew.bat jacocoTestReportDebug'
+        junit '**/testDebugUnitTest/*.xml'
+        publishCoverage(adapters: [jacocoAdapter('app\\build\\reports\\jacoco\\debug\\jacoco.xml')], sourceFileResolver: sourceFiles('NEVER_STORE'))
+      }
+    }
+
+    stage('Build') {
+      steps {
+        tool 'gradle-5.4.1-all'
+        tool 'JDK8'
+        bat 'gradlew.bat assemble'
+        archiveArtifacts '**/*.apk'
+      }
+    }
+
+    stage('Security Testing using QARK') {
+      when {
+        expression {
+          params.SecurityTesting == 'Yes'
+        }
+
+      }
+      steps {
+        bat 'qark "app\\build\\outputs\\apk\\release\\app-debug.apk"'
+      }
+    }
+
+    stage('Sign Android Package') {
+      steps {
+        bat '"jarsigner.exe" -verbose -keystore "<KEYSTORE_PATH>//jenkinsbook.keystore" -storepass jenkinsbook -signedjar "app\\build\\outputs\\apk\\release\\app-release-signed.apk" "app\\build\\outputs\\apk\\release\\app-release-unsigned.apk" jenkinsbook'
+        bat '"jarsigner.exe" -verify "app\\build\\outputs\\apk\\release\\app-release-signed.apk"'
+      }
+    }
+
+    stage('Upload to App Center') {
+      when {
+        expression {
+          params.Upload2AppCenter == 'Yes'
+        }
+
+      }
+      steps {
+        appCenter(apiToken: '**************************', ownerName: 'ms-outlook.com', appName: 'Android-Sample-App', pathToApp: 'app\\build\\outputs\\apk\\release\\app-release-signed.apk', distributionGroups: 'Beta Testing', releaseNotes: 'Security Bug Fixed - Ticket 2020.05.20')
+      }
+    }
+
+  }
+  environment {
+    ANDROID_HOME = 'C:\\Program Files (x86)\\Android\\android-sdk'
+    JAVA_HOME = 'C:\\Program Files\\Java\\jdk1.8.0_111'
+  }
+  parameters {
+    choice(name: 'SecurityTesting', choices: ['No', 'Yes'], description: 'Do you want to Perform Security Testing:')
+    choice(name: 'Upload2AppCenter', choices: ['No', 'Yes'], description: 'Do you want to Upload to AppCenter:')
+  }
+}

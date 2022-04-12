@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/AngularJSForm_deploy" />
+  <setParameter name="CRUD_SampleEntities-Web.config Connection String" value="metadata=res://*/Models.myModel.csdl|res://*/Models.myModel.ssdl|res://*/Models.myModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.;initial catalog=CRUD_Sample;user id=sa;password=sa@12345;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+</parameters>

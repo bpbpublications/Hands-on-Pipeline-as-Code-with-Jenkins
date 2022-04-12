@@ -1,0 +1,73 @@
+** Docker command to create Jenkins Container
+
+sudo docker run -p 8080:8080 -p 50000:50000 -v /home/test/Desktop/jenkins_home:/home/test/jenkins_home jenkinsci/blueocean
+
+** 	YAML to deploy the Docker Image stored in ACR to AKS for Jenkins. 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: blueocean-deployment
+ labels:
+    app: blueocean
+spec:
+ template:
+    metadata:
+     name: blueocean-pod
+     labels:
+        app: blueocean
+    spec:
+     containers:
+        - name: blueocean
+          image: sampleimages.azurecr.io/blueocean:v1
+          ports:
+          - containerPort: 8080
+          volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+     volumes:
+        - name: jenkins-home
+          emptyDir: {}
+ replicas: 1
+ 
+ selector:
+    matchLabels:
+        app: blueocean
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: blueocean-service
+ labels:
+    app: blueocean
+spec:
+ selector: 
+    app: blueocean
+ ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+ type: LoadBalancer
+
+
+Jenkinsfile 
+-----------
+
+pipeline {
+    agent {
+        dockerfile true
+    }
+    stages {
+        stage('Build') {
+            steps {
+				// Execute Batch script if OS flavor is Windows        
+				sh 'mvn clean package'
+				// Publish JUnit Report
+				junit '**/target/surefire-reports/TEST-*.xml'    
+				archiveArtifacts(artifacts: 'target/**/*.war', onlyIfSuccessful: true, fingerprint: true)
+            }        
+        }
+    }
+}
+
+

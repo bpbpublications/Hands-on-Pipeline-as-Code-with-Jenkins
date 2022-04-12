@@ -1,0 +1,196 @@
+
+** sonar-project.properties 
+
+sonar.projectKey=java-sonar-runner-simple
+sonar.projectName=Sample Java project
+sonar.projectVersion=1.0
+
+sonar.sources=src/main
+sonar.tests=src/test
+sonar.java.binaries=target/classes
+sonar.java.test.binaries=target/test-classes
+
+#Unit Test And Code Coverage
+sonar.junit.reportPaths=target/surefire-reports
+sonar.java.cobertura.reportPath=target/site/cobertura/coverage.xml
+sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+
+# Language
+sonar.language=java
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+
+
+** Jenkinsfile for Sample Java App
+
+pipeline {
+  agent {
+    node {
+      label 'master'
+    }
+
+  }
+  stages {
+    stage('Continuous Integration') {
+      agent {
+        node {
+          label 'master'
+        }
+
+      }
+
+// Unit test execution and code coverage calculation
+      steps {
+        withMaven(jdk: 'JAVA_HOME', maven: 'MAVEN_HOME') {
+          bat 'mvn clean'
+          bat(script: 'mvn test cobertura:cobertura install', label: 'Unit Testing and Code Coverage')
+          cobertura(autoUpdateHealth: true, autoUpdateStability: true, classCoverageTargets: 'target/site/cobertura/', coberturaReportFile: 'target/site/cobertura/*.xml', failUnstable: true, zoomCoverageChart: true)
+        }
+
+// Static code analysis using sonarqube
+        withSonarQubeEnv(installationName: 'SonarQube-Server', credentialsId: 'SonarToken') {
+          bat(script: '<SONARSCANNER_HOME>//sonar-scanner-4.3.0.2102-windows//bin//sonar-scanner -Dproject.settings=sonar-project.properties', label: 'SonarQube Analysis')
+        }
+
+//Wait for the Quality Gate results from SonarQube to Jenkins
+        waitForQualityGate(abortPipeline: true, credentialsId: 'SonarToken', webhookSecretId: 'SonarWebHook')
+        withMaven(jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', publisherStrategy: 'IMPLICIT') {
+          bat(script: 'mvn package -Dmaven.clean.skip=true -Dmaven.test.skip=true', label: 'Snapshot War Packaging')
+        }
+
+        archiveArtifacts(artifacts: 'target/**/*.war', onlyIfSuccessful: true, fingerprint: true)
+        script {
+          def pom = readMavenPom file: 'pom.xml'
+          VERSION = pom.version
+          env.SVERSION = VERSION //Stable version value from pom
+          echo env.SVERSION
+        }
+
+        script {
+          withCredentials([
+            usernamePassword(credentialsId: 'artifactory',
+            usernameVariable: 'username',
+            passwordVariable: 'password')
+          ]) {
+
+            print 'username=' + username + ' password=' + password
+
+            //Artifactory Credentials
+            env.username = username
+            env.password = password
+
+            //Batch command to Upload artifactory using above credentials
+            bat(script: 'jfrog rt u "**/sample-java.war" Sample-Java-Web-App/org/springframework/samples/sample-java/%SVERSION%/ --user=%username% --password=%password% --url=http://localhost:8081/artifactory', label: 'Artifactory Upload')
+          }
+        }
+
+      }
+    }
+
+// Deploy to Azure App Services – Dev slot
+    stage('DEV') {
+      steps {
+        script {
+          withCredentials([
+            usernamePassword(credentialsId: 'artifactory',
+            usernameVariable: 'username',
+            passwordVariable: 'password')
+          ]) {
+
+            //Download Snapshot Artifact from Artifactiory using above credentials
+            bat(script: 'jfrog rt dl Sample-Java-Web-App/org/springframework/samples/sample-java/%SVERSION%/sample-java.war --user=%username% --password=%password% --url=http://localhost:8081/artifactory', label: 'Artifactory Download')
+          }
+        }
+
+        azureWebAppPublish(azureCredentialsId: 'SampleJavaWebApp', appName: 'sample-java-webapp', resourceGroup: 'blueocean2020', deployOnlyIfSuccessful: true, filePath: 'org/springframework/samples/ sample-java/'+env.SVERSION+'/sample-java.war', slotName: 'DEV', sourceDirectory: '.')
+      }
+    }
+
+// Deployment to QA Environment with Approvals
+    stage('Deploy to QA?') {
+      steps {
+        input(message: 'Are you sure you want to deploy to QA Environment', id: 'QA', ok: 'QA Deploy', submitter: 'admin', submitterParameter: 'admin')
+      }
+    }
+
+    stage('QA') {
+      steps {
+        script {
+          def pom = readMavenPom file: 'pom.xml'
+          VERSION = pom.version.replaceAll('-SNAPSHOT','')
+          env.RVERSION = VERSION
+          println env.RVERSION
+        }
+
+        withMaven(jdk: 'JAVA_HOME', maven: 'MAVEN_HOME') {
+          bat(script: 'mvn release:prepare release:perform -Dmaven.clean.skip=true -Dmaven.test.skip=true -Dmaven.deploy.skip=true ', label: 'Maven Release')
+        }
+
+        bat(script: 'jfrog rt u "**/sample-java.war" Sample-Java-Web-App/org/springframework/samples/sample-java/%RVERSION%/ --user=admin --password=admin123 --url=http://localhost:8081/artifactory', label: 'Release Upload Artifactory')
+        bat(script: 'jfrog rt dl Sample-Java-Web-App/org/springframework/samples/sample-java/%RVERSION%/*.war --user=admin --password=admin123 --url=http://localhost:8081/artifactory', label: 'Release Package Download from Artifactory')
+        azureWebAppPublish(azureCredentialsId: 'SampleJavaWebApp', appName: 'sample-java-webapp', resourceGroup: 'blueocean2020', deployOnlyIfSuccessful: true, slotName: 'QA', filePath: 'org/springframework/samples/sample-java/'+env.RVERSION+'/sample-java.war', sourceDirectory: '.')
+      }
+    }
+
+    stage('Deploy to STAGE?') {
+      steps {
+        input(message: 'Are you sure you want to deploy to STAGE Environment', id: 'STAGE', ok: 'STAGE Deploy', submitter: 'admin', submitterParameter: 'admin')
+      }
+    }
+
+    stage('STAGE') {
+      steps {
+        bat(script: 'echo Revision version is %RVERSION%', label: 'New Revision Version')
+        azureWebAppPublish(azureCredentialsId: 'SampleJavaWebApp', appName: 'sample-java-webapp', resourceGroup: 'blueocean2020', filePath: 'org/springframework/samples/sample-java/'+env.RVERSION+'/sample-java.war', slotName: 'STAGE', sourceDirectory: '.', deployOnlyIfSuccessful: true)
+      }
+    }
+
+    stage('Deploy to PROD ?') {
+      steps {
+        input(message: 'Do you want deploy to prod? ', id: 'PROD', ok: 'PROD', submitter: 'admin', submitterParameter: 'admin')
+      }
+    }
+
+    stage('PROD') {
+      steps {
+        azureWebAppPublish(azureCredentialsId: 'SampleJavaWebApp', appName: 'sample-java-webapp', resourceGroup: 'blueocean2020', deployOnlyIfSuccessful: true, filePath: 'org/springframework/samples/sample-java/'+env.RVERSION+'/sample-java.war', sourceDirectory: '.')
+      }
+    }
+
+// Rollback 
+
+    stage('Rollback ?') {
+      steps {
+        script {
+          //User input to get yes or no input for rollback
+          def userInput = input(id: 'userInput', message: 'Do you want to Rollback?', submitter: 'admin', parameters: [choice(choices: ['Yes', 'No'], description: 'Please select a option below.\n Note: On Abort pipeline will be Aborted and Prod Stable Version will not be updated', name: 'env')])
+          echo ("You Entered '"+userInput+ "' to Rollback")
+
+          //script to rollback on 'Yes'
+          if(userInput=='Yes'){
+            echo ("Rollback in process")
+            //get stable version value
+            env.stableVersion = readFile 'D:\\Jenkins\\imp-docs\\stable-version.txt'
+            //download stable version from Artifactory
+            bat(script: 'jfrog rt dl Sample-Java-Web-App/org/springframework/samples/sample-java/%stableVersion%/*.war --user=admin --password=admin123 --url=http://localhost:8081/artifactory', label: 'Release Package Download from Artifactory')
+
+            //bat(script: 'MOVE org\\springframework\\samples\\spring-sample\\%stableVersion%\\*-sample-*.war org\\springframework\\samples\\sample-java\\4.2.11\\sample-java.war')
+            //Deploy stable version back to PRODUCTION environment
+            azureWebAppPublish(azureCredentialsId: 'SampleJavaWebApp', appName: 'sample-java-webapp', resourceGroup: 'blueocean2020', deployOnlyIfSuccessful: true, filePath: 'org/springframework/samples/sample-java/'+env.stableVersion+'/sample-java.war', sourceDirectory: '.')
+          }
+
+          //script to rollback on 'No'
+          else if(userInput=='No'){
+            echo ("Rollback aborted.\n Deployment Successful.\nUpdating Stable Version")
+            //write stable version to file
+            writeFile(file: 'D:\\Jenkins\\imp-docs\\stable-version.txt', text: env.RVERSION)
+            echo env.RVERSION
+          }
+        }
+
+      }
+    }
+
+  }
+}

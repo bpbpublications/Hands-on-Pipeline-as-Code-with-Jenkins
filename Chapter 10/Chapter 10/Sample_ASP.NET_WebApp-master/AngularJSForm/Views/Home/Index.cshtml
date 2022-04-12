@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Basic Calculator</h2>
+
+@*<div id="content" ng-controller="CustomerController">
+        <span ng-show="isViewLoading" class="viewLoading">
+            <img src="~/Content/images/ng-loader.gif" /> loading...
+        </span>
+        <div ng-class="result">{{message}}</div>
+        <hr />
+        <form ng-submit="submitForm()" name="frmCustomer">
+            <div>
+                <label for="email">Customer Name</label>
+                <input type="text" ng-model="cust.CustName" name="cname" placeholder="Enter your name" required ng-minlength="4" ng-maxlength="14" />
+                <span class="error" ng-show="(frmCustomer.$dirty||submitted) && frmCustomer.cname.$error.required">Customer name is Required</span>
+                <span class="error" ng-show="frmCustomer.$dirty && frmCustomer.cname.$error.minlength">Minimum length required is 5</span>
+                <span class="error" ng-show="frmCustomer.$dirty && frmCustomer.cname.$error.maxlength">Minimum length required is 15</span>
+            </div>
+            <div>
+                <label for="email">E-mail address</label>
+                <input ng-model="cust.CustEmail" type="email" name="email" placeholder="Enter your Email" required />
+                <span class="error" ng-show="(frmCustomer.$dirty ||submitted) && frmCustomer.email.$error.required">EmailId is Required!</span>
+                <span class="error" ng-show="(frmCustomer.$dirty ||submitted) && frmCustomer.$error.email">Invalid EmailId!</span>
+            </div>
+            <div>
+                <input type="submit" value="Submit" ng-disabled="myForm.$invalid">
+            </div>
+        </form>
+    </div>*@
+
+
+<div id="content" ng-controller="CalculatorController">
+    <span ng-show="isViewLoading" class="viewLoading">
+        <img src="~/Content/images/ng-loader.gif" /> loading...
+    </span>
+    <h3><div ng-class="result">{{message}}</div></h3>
+    <hr />
+    <form ng-submit="submitForm()" name="frmCalculator">
+        <div>
+            <label for="number1">Number 1</label>
+            <input type="number" ng-model="calc.Number1" name="number1" placeholder="Enter number 1" required ng-minlength="0" ng-maxlength="14" />
+            <span class="error" ng-show="(frmCalculator.$dirty||submitted) && frmCalculator.number1.$error.required">Number is Required</span>
+            <span class="error" ng-show="frmCalculator.$dirty && frmCalculator.number1.$error.minlength">Minimum length required is 0</span>
+            <span class="error" ng-show="frmCalculator.$dirty && frmCalculator.number1.$error.maxlength">Maximum length required is 15</span>
+        </div>
+        <div>
+            <label for="number2">Number 2</label>
+            <input type="number" ng-model="calc.Number2" name="number2" placeholder="Enter number 2" required ng-minlength="0" ng-maxlength="14" />
+            <span class="error" ng-show="(frmCalculator.$dirty||submitted) && frmCalculator.number2.$error.required">Number is Required</span>
+            <span class="error" ng-show="frmCalculator.$dirty && frmCalculator.number2.$error.minlength">Minimum length required is 0</span>
+            <span class="error" ng-show="frmCalculator.$dirty && frmCalculator.number2.$error.maxlength">Maximum length required is 15</span>
+        </div>
+        <div>
+            <label for="mathOps">Choose operation:</label>
+
+            <select id="Operation" ng-model="calc.Operation" ng-dropdown required>
+                <option ng-option value="">Select</option>
+                <option ng-option value="add" selected>Addition</option>
+                <option ng-option value="sub">Substraction</option>
+                <option ng-option value="div">Division</option>
+                <option ng-option value="mult">Multiply</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Submit" ng-disabled="myForm.$invalid">
+        </div>
+    </form>
+</div>
+
+
+@section JavaScript{
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-route.min.js"></script>
+    @*<script src="~/ControllersNg/CustomerController.js"></script>*@
+    <script src="~/ControllersNg/CalculatorController.js"></script>
+}
+
+<style>
+    #content label {
+        width: 150px;
+    }
+
+    #content input[type=submit] {
+        margin-left: 154px;
+        width: 120px;
+        padding: 5px 15px;
+        background: #ff6a00;
+        border: 0 none;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .color-default {
+        color: #000;
+    }
+
+    .color-red {
+        color: red;
+    }
+
+    .color-green {
+        color: green;
+    }
+
+    #content input.ng-dirty.ng-invalid {
+        border: 1px solid red;
+        background-color: rgb(255, 244, 244);
+    }
+</style>

@@ -1,0 +1,53 @@
+pipeline {
+  agent any
+  stages {
+    stage('CI') {
+      steps {
+        bat(script: 'nuget restore AngularJS.sln', label: 'Nuget Restore')
+        withSonarQubeEnv(installationName: 'SonarQube-Server', credentialsId: 'SonarQubeAdmin') {
+         bat(script: 'packages\\MSBuild.SonarQube.Runner.Tool.4.0.2\\tools\\SonarQube.Scanner.MSBuild.exe begin /k:"Sample-Net-Application"', label: 'Begin Analysis')
+        }
+
+        bat(script: '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\MSBuild\\15.0\\Bin\\msbuild.exe" AngularJS.sln', label: 'MSBuild')
+        withSonarQubeEnv(installationName: 'SonarQube-Server', credentialsId: 'SonarQubeAdmin') {
+          bat(script: 'packages\\MSBuild.SonarQube.Runner.Tool.4.0.2\\tools\\SonarQube.Scanner.MSBuild.exe end', label: 'end SonarQube Scan')
+         }
+        
+        bat(script: '"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\MSBuild\\15.0\\Bin\\msbuild.exe" "AngularJSForm/AngularJSForm.csproj" "/p:Platform=AnyCPU;Configuration=Release;PublishDestination=Publish" /t:PublishToFileSystem', label: 'MSBuild')
+        bat(script: '"C:\\Program Files (x86)\\Jenkins\\workspace\\Sample_ASP.NET_WebApp_master\\packages\\OpenCover.4.7.922\\tools\\OpenCover.Console.exe" -target:"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\MSTest.exe" -targetargs:"/testcontainer:\\"AngularJSFormTests1\\bin\\Debug\\AngularJSFormTests1.dll""', label: 'Code Coverage via MS Test')
+        mstest(testResultsFile: '**/*.trx')
+        script {
+          publishCoverage adapters: [opencoverAdapter(mergeToOneReport: true, path: 'results.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
+        }
+
+        bat(script: 'nuget spec && nuget pack AngularJSForm/AngularJSForm.csproj', label: 'Nuget package creation')
+        archiveArtifacts(artifacts: '**/AngularJSForm*.nupkg', onlyIfSuccessful: true, fingerprint: true)
+      }
+    }
+
+    stage('CD') {
+      steps {
+        echo 'Deploy to Azure'
+        azureWebAppPublish(azureCredentialsId: 'dotNET', appName: 'sample-net-app', resourceGroup: 'sample-net-application', deployOnlyIfSuccessful: true, slotName: 'dev', sourceDirectory: 'AngularJSForm\\obj\\Release\\Package\\PackageTmp')
+      }
+    }
+
+    stage('Test Deploy Octopus') {
+      steps {
+        echo 'Octopus Test environment Deploy'
+        octopusPack(toolId: 'OctoCLITool', packageId: 'sample-net-app', packageFormat: 'nuget', sourcePath: 'AngularJSForm', outputPath: 'target', packageVersion: '1.0.${BUILD_NUMBER}')
+        octopusPushPackage(packagePaths: 'target/sample-net-app.1.0.${BUILD_NUMBER}.nupkg', overwriteMode: 'OverwriteExisting', serverId: 'Octopus', toolId: 'OctoCLITool', spaceId: 'Spaces-1')
+        octopusCreateRelease(serverId: 'Octopus', toolId: 'OctoCLITool', project: 'Sample-dotNet', releaseVersion: '1.0.${BUILD_NUMBER}', spaceId: 'Spaces-1', environment: 'Sample-dotNet-project-test', waitForDeployment: true, jenkinsUrlLinkback: true, deployThisRelease: true, channel: 'sample-dotnet-channel')
+        octopusDeployRelease(toolId: 'OctoCLITool', serverId: 'Octopus', spaceId: 'Spaces-1', releaseVersion: '1.0.${BUILD_NUMBER}', project: 'Sample-dotNet', environment: 'Sample-dotNet-project-test', waitForDeployment: true)
+      }
+    }
+
+    stage('Prod Deploy Octopus') {
+      steps {
+        input(message: 'Would you like to deploy to prod?', ok: 'Deploy', id: 'PROD', submitter: 'admin', submitterParameter: 'admin')
+        octopusDeployRelease(serverId: 'Octopus', toolId: 'OctoCLITool', spaceId: 'Spaces-1', project: 'Sample-dotNet', releaseVersion: '1.0.${BUILD_NUMBER}', environment: 'Sample-dotNet-project', waitForDeployment: true)
+      }
+    }
+
+  }
+}

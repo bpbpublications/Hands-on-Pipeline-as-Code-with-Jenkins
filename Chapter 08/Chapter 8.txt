@@ -1,0 +1,36 @@
+** Jenkinsfile for Hybrid App
+
+pipeline {
+  agent any
+  stages {
+    stage('Continuous Integration') {
+      steps {
+        bat 'SET Path=%PATH%;GRADLE_PATH\\gradle-4.6\\bin'
+        
+		bat 'SONARSCANNER_PATH\\bin\\sonar-scanner.bat -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=XXXXXXXXXXXXXXXXXXXXXXXX -Dsonar.projectVersion=1.0 -Dsonar.projectKey=ionic-sample -Dsonar.sources=src'
+        
+		bat 'npm install && ng update && npm install karma-junit-reporter --save-dev && npm audit fix && npm i @angular-devkit/build-angular@0.803.25 && npm run test'
+        
+		cobertura(coberturaReportFile: '*\\coverage\\cobertura-coverage.xml', sourceEncoding: 'ASCII')
+        
+		junit '**/TESTS-*.xml'
+        
+		bat 'npm i @angular-devkit/build-angular@0.803.25 && ionic cordova platform add android . & ionic cordova build android --prod'
+        
+		archiveArtifacts '**/*.apk'
+      }
+    }
+
+    stage('Continuous Delivery') {
+      steps {
+        echo 'Configure Deployment step as an Exercise'
+      }
+    }
+
+  }
+  environment {
+    ANDROID_HOME = 'ANDROID_SDK_PATH\\android-sdk'
+    JAVA_HOME = 'JDK_PATH\\jdk1.8.0_111'
+    GRADLE_HOME = 'GRADLE_PATH\\gradle-4.6'
+  }
+}
